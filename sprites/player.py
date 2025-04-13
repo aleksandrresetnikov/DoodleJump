@@ -1,12 +1,14 @@
 from kivy.uix.image import Image
 from kivy.core.window import Window
 
+from settings_manager import SettingsManager
 from sprites.platform import BreakablePlatform
 
 
 class Player(Image):
     def __init__(self, skin, **kwargs):
         super().__init__(**kwargs)
+        self.settings = SettingsManager()
         self.size_hint = (None, None)
         self.width, self.height = 100, 100
         self.x, self.y = 200, 200
@@ -55,11 +57,12 @@ class Player(Image):
             return None
 
         platform = self.game.platforms.check_re_crossing(self.x+15, self.y + (self.height*0.005) + 5,
-                                                     self.width-30, self.height*0.005)
+                                                         self.width-30, self.height*0.005)
         return platform
 
     fall_offset = 0
     force = 3
+
     def update_jumping(self):
         self.update_y_movable(self.force)
 
@@ -70,7 +73,11 @@ class Player(Image):
         if self.force < -1 and (platform is not None and platform.has_collision()):
             self.force = 8
 
-        # Отдельный функционал
+            if platform.has_coin and not platform.use_coin:
+                platform.use_coin = True
+                platform.coin_entity.y = 10000
+                self.settings.add_coins(1)
+
         if self.force < -1 and isinstance(platform, BreakablePlatform):
             platform.begin_broking(on_break=self.on_break_platform)
 
@@ -89,10 +96,6 @@ class Player(Image):
         self.update_jumping()
         if self.game:
             keys = self.game.keys_pressed
-            '''if 119 in keys:
-                self.update_y_movable(self.step)
-            if 115 in keys:
-                self.update_y_movable(-self.step)'''
             if 100 in keys:
                 self.x += self.step
                 self.source = self.textures["right"]

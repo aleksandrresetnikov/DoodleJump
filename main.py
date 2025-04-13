@@ -5,9 +5,9 @@ from screens.game_over import GameOverScreen
 from screens.main_game import GameScreen
 from screens.main_menu import MainMenu
 from screens.market_menu import MarketMenu
+from settings_manager import SettingsManager
 
-skins_list = ['Default', 'Bunny', 'Doodlestein', 'Jungle',
-              'Snow', 'Soccer', 'Space', 'Underwater']
+settings = SettingsManager()
 
 
 class GameApp(App):
