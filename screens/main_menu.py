@@ -23,3 +23,6 @@ class MainMenu(Screen):
 
     def open_market(self, instance):
         self.manager.current = "market"  # Переключение на игру
+
+    def open_rating(self, instance):
+        self.manager.current = "rating_menu" # Переключение на меню списка лидеров
