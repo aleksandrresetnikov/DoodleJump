@@ -86,6 +86,13 @@ class SettingsManager:
         return True
 
 
+    def get_nickname(self):
+        return self.settings["nickname"]
+
+    def set_nickname(self, nickname):
+        self.settings["nickname"] = nickname
+
+
     def reset_to_default(self):
         self.settings = self.default_settings.copy()
         self._save_settings()

@@ -17,6 +17,7 @@ class Platform(Image):
 
         self.step = 5
         self.game = None
+        skin = "Default"
         self.source = f'assets/platforms/{skin}/pl{variant}.png'
 
     def set_game(self, game):
@@ -119,6 +120,7 @@ class BreakablePlatform(Platform):
                 self.y -= 24
 
     def update_current_source(self):
+        self.skin = "Default"
         self.source = f'assets/platforms/{self.skin}/pl3_{self.animation_step}.png'
         if self.animation_step > 3:
             self.source = f'assets/platforms/{self.skin}/pl3_{3}.png'

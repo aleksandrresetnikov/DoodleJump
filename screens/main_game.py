@@ -61,6 +61,11 @@ class GameScreen(ScreenBase):
 
         return layout
 
+    def on_enter(self):
+        skin_name = settings_instance.get_select_theme()
+        self.background.source=f'assets/background/{skin_name}.png'
+        self.background.reload()
+
     def update(self, dt):
         for item in self.update_bus:
             item.update(dt)

@@ -33,6 +33,7 @@ skins_prices = {
 class MarketMenu(ScreenBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.background = None
         self.left_label = None
         self.coins_label = None
         self.button_buy = None
@@ -58,8 +59,8 @@ class MarketMenu(ScreenBase):
     def create_layout(self):
         layout = FloatLayout()
 
-        background = Image(source='assets/background/Default.png', allow_stretch=True, keep_ratio=False)
-        layout.add_widget(background)
+        self.background = Image(source='assets/background/Default.png', allow_stretch=True, keep_ratio=False)
+        layout.add_widget(self.background)
 
         logo = Image(
             source='assets/promo/logo_market.png',
@@ -112,6 +113,10 @@ class MarketMenu(ScreenBase):
 
         skin_name = settings_instance.get_select_theme()
         self.skin_selector.select_skin_by_name(skin_name)
+
+        skin_name = settings_instance.get_select_theme()
+        self.background.source=f'assets/background/{skin_name}.png'
+        self.background.reload()
 
     def update_coins_label(self):
         self.coins_label.text = str(settings_instance.get_coins())
@@ -166,6 +171,13 @@ class MarketMenu(ScreenBase):
 
     def buy(self, instance):
         skin_name = self.skin_selector.get_select_skin_name()
+
+        is_unlocked = settings_instance.has_unlocked_theme(skin_name)
+        if is_unlocked:
+            settings_instance.set_select_theme(skin_name)
+            self.background.source = f'assets/background/{skin_name}.png'
+            return
+
         price = skins_prices[skin_name]
 
         if not settings_instance.spend_coins(price):
@@ -176,3 +188,5 @@ class MarketMenu(ScreenBase):
 
         self.button_buy.text = "Выбрать"
         self.price_label.text = ""
+        self.background.source = f'assets/background/{skin_name}.png'
+        self.update_coins_label()

@@ -19,6 +19,11 @@ class GameOverScreen(ScreenBase):
         layout.add_widget(menu_button)
         self.add_widget(layout)
 
+    # def on_enter(self):
+    #     skin_name = settings_instance.get_select_theme()
+    #     self.background.source=f'assets/background/{skin_name}.png'
+    #     self.background.reload()
+
     def restart_game(self, instance):
         self.manager.get_screen("game").reset_game()
         self.manager.current = "game"
