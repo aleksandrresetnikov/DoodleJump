@@ -1,14 +1,13 @@
 from kivy.uix.image import Image
 from kivy.core.window import Window
 
-from settings_manager import SettingsManager
 from sprites.platform import BreakablePlatform
+from settings_manager import settings_instance
 
 
 class Player(Image):
     def __init__(self, skin, **kwargs):
         super().__init__(**kwargs)
-        self.settings = SettingsManager()
         self.size_hint = (None, None)
         self.width, self.height = 100, 100
         self.x, self.y = 200, 200
@@ -76,7 +75,7 @@ class Player(Image):
             if platform.has_coin and not platform.use_coin:
                 platform.use_coin = True
                 platform.coin_entity.y = 10000
-                self.settings.add_coins(1)
+                settings_instance.add_coins(1)
 
         if self.force < -1 and isinstance(platform, BreakablePlatform):
             platform.begin_broking(on_break=self.on_break_platform)

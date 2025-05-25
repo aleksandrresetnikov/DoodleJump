@@ -1,10 +1,11 @@
-from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 
+from screens.screen_base import ScreenBase
 
-class GameOverScreen(Screen):
+
+class GameOverScreen(ScreenBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         layout = BoxLayout(orientation='vertical', spacing=10, padding=50)

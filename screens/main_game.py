@@ -1,18 +1,19 @@
-from kivy.uix.screenmanager import Screen
 from kivy.core.window import Window
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.clock import Clock
 
+from screens.screen_base import ScreenBase
 from sprites.platform import PlatformsCollector
 from sprites.player import Player
+from settings_manager import settings_instance
 
 
-class GameScreen(Screen):
+class GameScreen(ScreenBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.keys_pressed = set()
-        self.skin = "Default"  # Можно изменить
+        self.skin = settings_instance.get_select_theme()
 
         self.platforms = None
         self.player_widget = None

@@ -8,7 +8,8 @@ class SettingsManager:
         self.file_path = file_path
         self.default_settings = {
             "unlocked_themes": ["Default"],
-            "coins": 0
+            "coins": 0,
+            "select_theme": "Default"
         }
         self.settings = self._load_or_create_settings()
 
@@ -67,9 +68,27 @@ class SettingsManager:
             self.settings["coins"] -= amount
             self._save_settings()
             return True
+
         return False
+
+
+    def get_select_theme(self):
+        return self.settings["select_theme"]
+
+    def set_select_theme(self, theme_name) -> bool:
+        unlocked_themes = self.get_unlocked_themes()
+        if not (theme_name in unlocked_themes):
+            return False
+
+        self.settings["select_theme"] = theme_name
+        self._save_settings()
+
+        return True
 
 
     def reset_to_default(self):
         self.settings = self.default_settings.copy()
         self._save_settings()
+
+
+settings_instance = SettingsManager()

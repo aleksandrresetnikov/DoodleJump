@@ -1,10 +1,11 @@
-from kivy.uix.screenmanager import Screen
 from kivy.uix.image import Image
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 
 from components.skin_selector import SkinSelector
+from screens.screen_base import ScreenBase
+from settings_manager import settings_instance
 
 skins_localization = {
     "Default": 'Обычный дудлик',
@@ -17,8 +18,19 @@ skins_localization = {
     "Soccer": 'Дудлик футболист'
 }
 
+skins_prices = {
+    "Default": 0,
+    "Doodlestein": 155,
+    "Jungle": 125,
+    "Space": 100,
+    "Bunny": 150,
+    "Underwater": 225,
+    "Snow": 250,
+    "Soccer": 125
+}
 
-class MarketMenu(Screen):
+
+class MarketMenu(ScreenBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.left_label = None
@@ -41,7 +53,7 @@ class MarketMenu(Screen):
             self.price_label.text = ""
         else:
             self.button_buy.text = "Купить"
-            self.price_label.text = "125"
+            self.update_price_label()
 
     def create_layout(self):
         layout = FloatLayout()
@@ -82,7 +94,7 @@ class MarketMenu(Screen):
         self.skin_selector = SkinSelector(skin_change_event=self.on_skin_change)
         self.skin_selector.processing_layout(layout)
 
-        self.coins_label.text = str(self.skin_selector.settings.get_coins())
+        self.update_coins_label()
 
         button_back = Button(
             size_hint=(0.28, 0.053),
@@ -94,6 +106,20 @@ class MarketMenu(Screen):
         layout.add_widget(button_back)
 
         return layout
+
+    def on_enter(self):
+        self.update_coins_label()
+
+        skin_name = settings_instance.get_select_theme()
+        self.skin_selector.select_skin_by_name(skin_name)
+
+    def update_coins_label(self):
+        self.coins_label.text = str(settings_instance.get_coins())
+
+    def update_price_label(self):
+        skin_name = self.skin_selector.get_select_skin_name()
+        price = skins_prices[skin_name]
+        self.price_label.text = str(price)
 
     def create_bottom_panel(self):
         panel = FloatLayout(size_hint=(1, 0.1), pos_hint={'bottom': 1})
@@ -139,4 +165,14 @@ class MarketMenu(Screen):
         self.manager.current = "main_menu"
 
     def buy(self, instance):
-        pass
+        skin_name = self.skin_selector.get_select_skin_name()
+        price = skins_prices[skin_name]
+
+        if not settings_instance.spend_coins(price):
+            return
+
+        settings_instance.add_unlocked_theme(skin_name)
+        settings_instance.set_select_theme(skin_name)
+
+        self.button_buy.text = "Выбрать"
+        self.price_label.text = ""
