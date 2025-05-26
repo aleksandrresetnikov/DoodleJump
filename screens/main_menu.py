@@ -68,12 +68,44 @@ class MainMenu(ScreenBase):
             y=260
         )
 
+        self.create_decor(layout)
+
         layout.add_widget(logo)
         layout.add_widget(play_button)
         layout.add_widget(market_button)
         layout.add_widget(stats_button)
         layout.add_widget(exit_button)
         return layout
+
+    def create_decor(self, layout):
+        self.create_decor_platform(layout, 65, 0)
+        self.create_decor_platform(layout, 105, 125)
+        self.create_decor_platform(layout, 85, -165)
+        self.create_decor_platform(layout, -95, -235)
+
+        player = Image(
+            source='assets/player/Default/left.png',
+            keep_ratio=False,
+            x=105,
+            y=160
+        )
+        layout.add_widget(player)
+
+        enemy = Image(
+            source='assets/enemies/big_enemy.png',
+            keep_ratio=False,
+            x=65,
+            y=35
+        )
+        layout.add_widget(enemy)
+
+    def create_decor_platform(self, layout, x, y):
+        decor_platform = Image(
+            source='assets/platforms/Default/pl1.png',
+            keep_ratio=False, x=x, y=y
+        )
+
+        layout.add_widget(decor_platform)
 
     def on_enter(self):
         skin_name = settings_instance.get_select_theme()
