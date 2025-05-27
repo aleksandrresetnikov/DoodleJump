@@ -62,6 +62,14 @@ class Player(Image):
     fall_offset = 0
     force = 3
 
+    def check_enemy_re_crossing(self):
+        if self.game.enemies is None:
+            return None
+
+        enemy = self.game.platforms.check_re_crossing(self.x + 15, self.y + (self.height * 0.005) + 5,
+                                                      self.width - 30, self.height * 0.005)
+        return enemy
+
     def update_jumping(self):
         self.update_y_movable(self.force)
 

@@ -15,6 +15,9 @@ class Enemy(Image):
     def set_game(self, game):
         self.game = game
 
+    def update(self, dt):
+        pass
+
 
 class EnemiesCollector:
     def __init__(self, layout):
@@ -22,7 +25,12 @@ class EnemiesCollector:
         self.create_enemies(layout)
 
     def create_enemies(self, layout):
-        pass
+        platform_positions = self.generate_platform_positions(3, (100, 350), (2000, 3500))
+        for (x, y) in platform_positions:
+            enemy = Enemy()
+            enemy.x = x
+            enemy.y = y
+            self.add_platform(enemy, layout)
 
     @staticmethod
     def _check_re_crossing(x1, y1, w1, h1, x2, y2, w2, h2):
@@ -49,3 +57,7 @@ class EnemiesCollector:
         rnd_add_x = random.randint(int(enemy.get_randomizing_height() * 0.5),
                                    int(enemy.get_randomizing_height() * 1.5))
         enemy.y += random.randint(1000, 1200 + int(score / 7) + rnd_add_x)
+
+    def update(self, dt):
+        for enemy in self.enemies:
+            enemy.update(dt)

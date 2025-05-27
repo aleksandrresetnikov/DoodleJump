@@ -4,6 +4,7 @@ from kivy.uix.label import Label
 from kivy.clock import Clock
 
 from screens.screen_base import ScreenBase
+from sprites.enemy import EnemiesCollector
 from sprites.platform import PlatformsCollector
 from sprites.player import Player
 from settings_manager import settings_instance
@@ -20,6 +21,7 @@ class GameScreen(ScreenBase):
         self.background = None
         self.progressLabel = None
         self.update_bus = []
+        self.enemies = None
 
         self.init_components()
 
@@ -35,6 +37,7 @@ class GameScreen(ScreenBase):
         self.background = None
         self.progressLabel = None
         self.update_bus = []
+        self.enemies = None
 
         self.clear_widgets()
         layout = self.create_layout()
@@ -50,6 +53,9 @@ class GameScreen(ScreenBase):
         self.create_platforms(layout)
         self.update_bus.append(self.platforms)
 
+        self.create_enemies(layout)
+        self.update_bus.append(self.enemies)
+
         self.player_widget = Player(skin=self.skin)
         self.player_widget.set_game(self)
         layout.add_widget(self.player_widget)
@@ -60,6 +66,9 @@ class GameScreen(ScreenBase):
         layout.add_widget(self.progressLabel)
 
         return layout
+
+    def create_enemies(self, layout):
+        self.enemies = EnemiesCollector(layout=layout)
 
     def on_enter(self):
         skin_name = settings_instance.get_select_theme()
